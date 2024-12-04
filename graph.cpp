@@ -219,3 +219,28 @@ void Show(Graph G) {
 
 
 
+// SLL temporary
+
+void CreateTempList(tempList &L){
+    L.first = Null;
+}
+
+Addr_TempListElmt AlokasiTempElmt(Infotype_TempList x){
+	Addr_TempListElmt p = new tempListElmt;
+	p->info = x;
+	p->next = Null;
+	return p;
+}
+
+void InsertLast_TempList(tempList &L, Addr_TempListElmt P){
+	if (L.first == Null){
+		L.first = P;
+	}
+	else {
+		Addr_TempListElmt last = L.first;
+		while (last->next != Null){
+			last = last->next;
+		}
+		last->next = P;
+	}
+}

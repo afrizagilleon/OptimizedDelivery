@@ -37,5 +37,11 @@ int main(int argc, char** argv) {
 	Disconnecting(G,"B","D");
 	Show(G);
 
+    tempList L;
+    CreateTempList(L);
+    InsertLast_TempList(L, AlokasiTempElmt("A"));
+    InsertLast_TempList(L, AlokasiTempElmt("B"));
+    InsertLast_TempList(L, AlokasiTempElmt("C"));
+
 	return 0;
 }
