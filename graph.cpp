@@ -88,7 +88,7 @@ void Connecting(Graph &G,Infotype_Kota node1,Infotype_Kota node2, string namaJal
 	P1=FindKota(G,node1);
 	P2=FindKota(G,node2);
 	if (P1!=Null && P2!=Null){
-		E1=AlokasiJalan({node1,namaJalan,waktu});
+		E1=AlokasiJalan({node2,namaJalan,waktu});
 		InsertLast_Jalan(G,P1,E1);
 		E2=AlokasiJalan({node1,namaJalan,waktu});
 		InsertLast_Jalan(G,P2,E2);
@@ -200,7 +200,9 @@ void Show(Graph G) {
 	if (G.Start!=Null) {
 		N=G.Start;
 		while (N!=Null) {
-			cout<<"Kota "<<N->Info<<" tetangganya: ";
+			cout<<"<<==========================>>"<< endl;
+			cout<<"Kota "<<N->Info<<" tetangganya: "<< endl;
+			cout<<"=============================="<< endl;
 			E=N->FirstJalan;
 			while (E!=Null) {
 				cout<< "Nama kota: " << E->Info.kota<<endl;
@@ -208,6 +210,7 @@ void Show(Graph G) {
 				cout<< "Bobot : " << E->Info.waktu<<endl;
 				E=E->NextJalan;
 			}
+			cout<<"<<==========================>>"<< endl;
 			cout<<"\n";
 			N=N->NextKota;
 		}

@@ -49,8 +49,6 @@ void CreateTempList(tempList &L);
 Addr_TempListElmt AlokasiTempElmt(Infotype_TempList x);
 void InsertLast_TempList(tempList &L, Addr_TempListElmt P);
 
-
-
 void CreateGraph(Graph &G);
 Addr_Kota AlokasiKota(Infotype_Kota infoKota);
 Addr_Jalan AlokasiJalan(Infotype_Jalan infoJalan);
