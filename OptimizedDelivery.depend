@@ -1,0 +1,21 @@
+# depslib dependency file v1.0
+1733303869 source:d:\telkom univ\semester 3\strukdat\tubes\main.cpp
+	<iostream>
+	"graph.h"
+
+1733303842 d:\telkom univ\semester 3\strukdat\tubes\graph.h
+	<iostream>
+	<string>
+
+1733305137 source:e:\developed code\web and api\optimizeddelivery\main.cpp
+	<iostream>
+	"graph.h"
+
+1733304920 e:\developed code\web and api\optimizeddelivery\graph.h
+	<iostream>
+	<string>
+
+1733305377 source:e:\developed code\web and api\optimizeddelivery\graph.cpp
+	<iostream>
+	"graph.h"
+
