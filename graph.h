@@ -62,6 +62,10 @@ void DeleteLast_Jalan(Graph &G,Addr_Kota PKota,Addr_Jalan &P);
 void DeleteAfter_Jalan(Graph &G,Addr_Kota PKota,Addr_Jalan Prec,Addr_Jalan &P);
 void Delete_Jalan(Graph &G,Addr_Kota PKota,Addr_Jalan PJalan);
 void Disconnecting(Graph &G,Infotype_Kota node1,Infotype_Kota node2);
+void Dijkstra(Graph &G, tempList &L, string currentKota, string destinationKota);
 void Show(Graph G);
+Addr_Jalan FindShortestNeighbour(Graph G, Addr_Kota P, tempList L);
+string FindLastTempList(tempList L);
+bool HasVisited(tempList L, string kota);
 
 

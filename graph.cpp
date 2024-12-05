@@ -1,6 +1,5 @@
 #include <iostream>
 
-
 #include "graph.h"
 
 using namespace std;
@@ -246,4 +245,55 @@ void InsertLast_TempList(tempList &L, Addr_TempListElmt P){
 		}
 		last->next = P;
 	}
+}
+
+void Dijkstra(Graph &G, tempList &L, string currentKota, string destinationKota) {
+	if (currentKota == destinationKota) {
+		cout << "Kota " << currentKota << " adalah tujuan akhir" << endl;
+        return;
+    }
+
+    Addr_Kota P = FindKota(G, currentKota);
+    Addr_Jalan shortest = FindShortestNeighbour(G, P, L);
+    if (shortest != nullptr) {
+        InsertLast_TempList(L, AlokasiTempElmt(shortest->Info.kota));
+		cout << "Kota " << shortest->Info.kota << " ditambahkan ke dalam list" << endl;
+        Dijkstra(G, L, shortest->Info.kota, destinationKota); // Rekursi
+    }
+}
+
+
+
+Addr_Jalan FindShortestNeighbour(Graph G, Addr_Kota P, tempList L){
+	
+	Addr_Jalan E = P->FirstJalan;
+	Addr_Jalan shortest = E;
+	while (E != Null){
+		if (E->Info.waktu < shortest->Info.waktu && !HasVisited(L, E->Info.kota)){
+			shortest = E;
+		}
+		E = E->NextJalan;
+	}
+	
+	return shortest;
+}
+
+bool HasVisited(tempList L, string kota){
+	Addr_TempListElmt P = L.first;
+	while(P != Null){
+		if (P->info == kota){
+			return true;
+		}
+		P = P->next;
+	}
+	return false;
+}
+
+
+string FindLastTempList(tempList L){
+	Addr_TempListElmt P = L.first;
+	while(P->next != Null){
+		P = P->next;
+	}
+	return P->info;
 }

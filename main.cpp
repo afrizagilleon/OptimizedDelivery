@@ -18,30 +18,38 @@ int main(int argc, char** argv) {
 	P=AlokasiKota("D");
 	AddNewKota(G,P);
 
+	// Connecting(G,"A","B","Jl.Sisingamaharaja",30);
+	// Connecting(G,"A","C","Jl.Katomos",20);
+	// Connecting(G,"C","B","Jl.Setia Budi",30);
+	// Connecting(G,"B","D","Jl.Jamin Ginting",200);
+	// Connecting(G,"C","D","Jl.Littleindia",10);
+
 	Connecting(G,"A","B","Jl.Sisingamaharaja",30);
 	Connecting(G,"A","C","Jl.Katomos",20);
-	Connecting(G,"A","D","Jl.Setia Budi",30);
-	Connecting(G,"B","D","Jl.Jamin Ginting",200);
+	Connecting(G,"C","B","Jl.Setia Budi",1);
+	Connecting(G,"B","D","Jl.Jamin Ginting",1);
 	Connecting(G,"C","D","Jl.Littleindia",10);
 	Show(G);
 
-	cout<<"Disconnecting A D\n";
-	Disconnecting(G,"A","D");
-	Show(G);
+	// cout<<"Disconnecting A D\n";
+	// Disconnecting(G,"A","D");
+	// Show(G);
 
-	cout<<"Disconnecting A B\n";
-	Disconnecting(G,"A","B");
-	Show(G);
+	// cout<<"Disconnecting A B\n";
+	// Disconnecting(G,"A","B");
+	// Show(G);
 
-	cout<<"Disconnecting B D\n";
-	Disconnecting(G,"B","D");
-	Show(G);
+	// cout<<"Disconnecting B D\n";
+	// Disconnecting(G,"B","D");
+	// Show(G);
 
     tempList L;
     CreateTempList(L);
-    InsertLast_TempList(L, AlokasiTempElmt("A"));
-    InsertLast_TempList(L, AlokasiTempElmt("B"));
-    InsertLast_TempList(L, AlokasiTempElmt("C"));
+	Dijkstra(G, L, "A", "D");
 
 	return 0;
+}
+
+void menu(){
+
 }
