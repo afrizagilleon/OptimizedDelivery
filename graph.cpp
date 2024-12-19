@@ -87,15 +87,34 @@ void Connecting(Graph &G,Infotype_Kota node1,Infotype_Kota node2, string namaJal
 	P1=FindKota(G,node1);
 	P2=FindKota(G,node2);
 	if (P1!=Null && P2!=Null){
+		if(checkConnection(G, P1, P2)) {
+			cout << "Kota " << node1 << " dan " << node2 << " sudah terhubung" << endl;
+			return;
+		}
 		E1=AlokasiJalan({node2,namaJalan,waktu});
 		InsertLast_Jalan(G,P1,E1);
 		E2=AlokasiJalan({node1,namaJalan,waktu});
 		InsertLast_Jalan(G,P2,E2);
 	}
 	else {
-		cout<<"Kota tidak ditemukan\n";
+		cout<<"Kota asal atau tujuan tidak ditemukan\n";
 	}
 }
+
+bool checkConnection(Graph G, Addr_Kota node1, Addr_Kota node2) {
+	Addr_Jalan E1 = node1->FirstJalan;
+	Addr_Jalan E2 = node2->FirstJalan;
+	while (E1 != Null && E2 != Null) {
+		if (E1->Info.kota == node2->Info && E2->Info.kota == node1->Info) {
+			return true;
+		}
+		E1 = E1->NextJalan;
+		E2 = E2->NextJalan;
+	}
+	return false;
+}
+
+
 
 Addr_Jalan FindJalan(Graph &G,Addr_Kota PKota,Infotype_Kota data) {
 	Addr_Jalan P;
@@ -247,47 +266,52 @@ void InsertLast_TempList(tempList &L, Addr_TempListElmt P){
 	}
 }
 
+
 void Dijkstra(Graph &G, tempList &L, string currentKota, string destinationKota) {
+    InsertLast_TempList(L, AlokasiTempElmt(currentKota));
+    cout << "Kota " << currentKota << " ditambahkan ke dalam list" << endl;
+    
 	if (currentKota == destinationKota) {
-		cout << "Kota " << currentKota << " adalah tujuan akhir" << endl;
+        cout << "Kota " << currentKota << " adalah tujuan akhir" << endl;
         return;
     }
+	
 
     Addr_Kota P = FindKota(G, currentKota);
     Addr_Jalan shortest = FindShortestNeighbour(G, P, L);
     if (shortest != nullptr) {
-        InsertLast_TempList(L, AlokasiTempElmt(shortest->Info.kota));
-		cout << "Kota " << shortest->Info.kota << " ditambahkan ke dalam list" << endl;
-        Dijkstra(G, L, shortest->Info.kota, destinationKota); // Rekursi
+        Dijkstra(G, L, shortest->Info.kota, destinationKota); 
+    } else {
+        cout << "Tidak ada tetangga yang belum dikunjungi dari kota " << currentKota << endl;
     }
 }
 
-
-
-Addr_Jalan FindShortestNeighbour(Graph G, Addr_Kota P, tempList L){
-	
-	Addr_Jalan E = P->FirstJalan;
-	Addr_Jalan shortest = E;
-	while (E != Null){
-		if (E->Info.waktu < shortest->Info.waktu && !HasVisited(L, E->Info.kota)){
-			shortest = E;
-		}
-		E = E->NextJalan;
-	}
-	
-	return shortest;
+Addr_Jalan FindShortestNeighbour(Graph G, Addr_Kota P, tempList L) {
+    Addr_Jalan E = P->FirstJalan;
+    Addr_Jalan shortest = nullptr;
+    while (E != nullptr) {
+        if (!HasVisited(L, E->Info.kota)) {
+            if (shortest == nullptr || E->Info.waktu < shortest->Info.waktu) {
+                shortest = E;
+            }
+        }
+        E = E->NextJalan;
+    }
+    return shortest;
 }
 
-bool HasVisited(tempList L, string kota){
-	Addr_TempListElmt P = L.first;
-	while(P != Null){
-		if (P->info == kota){
-			return true;
-		}
-		P = P->next;
-	}
-	return false;
+bool HasVisited(tempList L, string kota) {
+    Addr_TempListElmt P = L.first;
+    while (P != nullptr) {
+        if (P->info == kota) {
+            return true;
+        }
+        P = P->next;
+    }
+    return false;
 }
+
+
 
 
 string FindLastTempList(tempList L){
@@ -296,4 +320,15 @@ string FindLastTempList(tempList L){
 		P = P->next;
 	}
 	return P->info;
+}
+
+// debug function
+
+void printTempList(tempList L){
+	Addr_TempListElmt P = L.first;
+	while(P != Null){
+		cout << P->info << " ";
+		P = P->next;
+	}
+	cout << endl;
 }

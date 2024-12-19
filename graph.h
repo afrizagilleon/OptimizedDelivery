@@ -67,5 +67,5 @@ void Show(Graph G);
 Addr_Jalan FindShortestNeighbour(Graph G, Addr_Kota P, tempList L);
 string FindLastTempList(tempList L);
 bool HasVisited(tempList L, string kota);
-
-
+bool checkConnection(Graph G, Addr_Kota node1, Addr_Kota node2);
+void printTempList(tempList L);

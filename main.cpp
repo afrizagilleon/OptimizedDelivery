@@ -1,22 +1,30 @@
-    #include <iostream>
-
+#include <iostream>
 #include "graph.h"
 
 using namespace std;
+
+void menu(){
+	cout<<"1. Add Kota\n";
+	cout<<"2. Add Jalur\n";
+	cout<<"3. Show Graph\n";
+	cout<<"4. Dijkstra\n";
+	cout<<"5. Exit\n";
+	cout<<"Choose: ";
+}
 
 int main(int argc, char** argv) {
 	Graph G;
 	Addr_Kota P;
 
-	CreateGraph(G);
-	P=AlokasiKota("A");
-	AddNewKota(G,P);
-	P=AlokasiKota("B");
-	AddNewKota(G,P);
-	P=AlokasiKota("C");
-	AddNewKota(G,P);
-	P=AlokasiKota("D");
-	AddNewKota(G,P);
+	// CreateGraph(G);
+	// P=AlokasiKota("A");
+	// AddNewKota(G,P);
+	// P=AlokasiKota("B");
+	// AddNewKota(G,P);
+	// P=AlokasiKota("C");
+	// AddNewKota(G,P);
+	// P=AlokasiKota("D");
+	// AddNewKota(G,P);
 
 	// Connecting(G,"A","B","Jl.Sisingamaharaja",30);
 	// Connecting(G,"A","C","Jl.Katomos",20);
@@ -24,12 +32,12 @@ int main(int argc, char** argv) {
 	// Connecting(G,"B","D","Jl.Jamin Ginting",200);
 	// Connecting(G,"C","D","Jl.Littleindia",10);
 
-	Connecting(G,"A","B","Jl.Sisingamaharaja",30);
-	Connecting(G,"A","C","Jl.Katomos",20);
-	Connecting(G,"C","B","Jl.Setia Budi",1);
-	Connecting(G,"B","D","Jl.Jamin Ginting",1);
-	Connecting(G,"C","D","Jl.Littleindia",10);
-	Show(G);
+	// Connecting(G,"A","B","Jl.Sisingamaharaja",30);
+	// Connecting(G,"A","C","Jl.Katomos",20);
+	// Connecting(G,"C","B","Jl.Setia Budi",1);
+	// Connecting(G,"B","D","Jl.Jamin Ginting",1);
+	// Connecting(G,"C","D","Jl.Littleindia",10);
+	// Show(G);
 
 	// cout<<"Disconnecting A D\n";
 	// Disconnecting(G,"A","D");
@@ -43,13 +51,56 @@ int main(int argc, char** argv) {
 	// Disconnecting(G,"B","D");
 	// Show(G);
 
-    tempList L;
-    CreateTempList(L);
-	Dijkstra(G, L, "A", "D");
+	// Dijkstra(G, L, "A", "D");
 
+	int inputMenu;
+	while (inputMenu != 5) {
+		menu();
+		cin>>inputMenu;
+		string kota1, kota2, jalan;
+		string currentKota, destinationKota;
+		string kota;
+		switch(inputMenu){
+			case 1:
+				cout<<"Masukkan nama kota: ";
+				cin>>kota;
+				P=AlokasiKota(kota);
+				AddNewKota(G,P);
+				break;
+			case 2:
+				int waktu;
+				cout<<"Masukkan nama kota 1: ";
+				cin>>kota1;
+
+				cout<<"Masukkan nama kota 2: ";
+				cin>>kota2;
+
+				cout<<"Masukkan nama jalan: ";
+				cin>>jalan;
+
+				cout<<"Masukkan waktu: ";
+				cin>>waktu;
+				Connecting(G,kota1,kota2,jalan,waktu);
+				break;
+			case 3:
+				Show(G);
+				break;
+			case 4:
+				tempList L;
+    			CreateTempList(L);
+				cout<<"Masukkan kota asal: ";
+				cin>>currentKota;
+				cout<<"Masukkan kota tujuan: ";
+				cin>>destinationKota;
+				Dijkstra(G, L, currentKota, destinationKota);
+				break;
+			case 5:
+				break;
+			default:
+				cout<<"Input tidak valid\n";
+				break;
+		}
+		cout<<"\n";
+	}
 	return 0;
-}
-
-void menu(){
-
 }
