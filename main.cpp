@@ -60,6 +60,7 @@ int main(int argc, char** argv) {
 		string kota1, kota2, jalan;
 		string currentKota, destinationKota;
 		string kota;
+		int totalWaktu;
 		switch(inputMenu){
 			case 1:
 				cout<<"Masukkan nama kota: ";
@@ -88,11 +89,12 @@ int main(int argc, char** argv) {
 			case 4:
 				tempList L;
     			CreateTempList(L);
+				totalWaktu = 0;
 				cout<<"Masukkan kota asal: ";
 				cin>>currentKota;
 				cout<<"Masukkan kota tujuan: ";
 				cin>>destinationKota;
-				Dijkstra(G, L, currentKota, destinationKota);
+				Dijkstra(G, L, currentKota, destinationKota,totalWaktu);
 				break;
 			case 5:
 				break;

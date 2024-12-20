@@ -267,12 +267,18 @@ void InsertLast_TempList(tempList &L, Addr_TempListElmt P){
 }
 
 
-void Dijkstra(Graph &G, tempList &L, string currentKota, string destinationKota) {
+void Dijkstra(Graph &G, tempList &L, string currentKota, string destinationKota, int &totalWaktu) {
     InsertLast_TempList(L, AlokasiTempElmt(currentKota));
-    cout << "Kota " << currentKota << " ditambahkan ke dalam list" << endl;
+
+	if(totalWaktu != 0){
+	    cout << " menuju Kota " << currentKota << endl;
+	}else{
+		cout << "Kota " << currentKota << " adalah kota asal" << endl;
+	}
     
 	if (currentKota == destinationKota) {
         cout << "Kota " << currentKota << " adalah tujuan akhir" << endl;
+		cout << "Total waktu tersingkat yang diperlukan: " << totalWaktu << endl;
         return;
     }
 	
@@ -280,7 +286,8 @@ void Dijkstra(Graph &G, tempList &L, string currentKota, string destinationKota)
     Addr_Kota P = FindKota(G, currentKota);
     Addr_Jalan shortest = FindShortestNeighbour(G, P, L);
     if (shortest != nullptr) {
-        Dijkstra(G, L, shortest->Info.kota, destinationKota); 
+		cout << "Melalui jalan " << shortest->Info.namaJalan << " memakan waktu " << shortest->Info.waktu ;
+        Dijkstra(G, L, shortest->Info.kota, destinationKota, totalWaktu += shortest->Info.waktu); 
     } else {
         cout << "Tidak ada tetangga yang belum dikunjungi dari kota " << currentKota << endl;
     }
