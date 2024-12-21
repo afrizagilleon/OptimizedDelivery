@@ -6,9 +6,12 @@ using namespace std;
 void menu(){
 	cout<<"1. Add Kota\n";
 	cout<<"2. Add Jalur\n";
-	cout<<"3. Show Graph\n";
-	cout<<"4. Dijkstra\n";
-	cout<<"5. Exit\n";
+	cout<<"3. Delete Kota\n";
+	cout<<"4. Delete Jalur\n";
+	cout<<"5. Show Graph\n";
+	cout<<"6. Jalur Tercepat (Djikstra)\n";
+	cout<<"7. Jalur Tercepat Alternatif (DFS)\n";
+	cout<<"9. Exit\n";
 	cout<<"Choose: ";
 }
 
@@ -16,7 +19,7 @@ int main(int argc, char** argv) {
 	Graph G;
 	Addr_Kota P;
 
-	// CreateGraph(G);
+	CreateGraph(G);
 	// P=AlokasiKota("A");
 	// AddNewKota(G,P);
 	// P=AlokasiKota("B");
@@ -54,12 +57,13 @@ int main(int argc, char** argv) {
 	// Dijkstra(G, L, "A", "D");
 
 	int inputMenu;
-	while (inputMenu != 5) {
+	while (inputMenu != 9) {
 		menu();
 		cin>>inputMenu;
 		string kota1, kota2, jalan;
 		string currentKota, destinationKota;
 		string kota;
+		string namaJalanTerblokir;
 		int totalWaktu;
 		switch(inputMenu){
 			case 1:
@@ -84,9 +88,22 @@ int main(int argc, char** argv) {
 				Connecting(G,kota1,kota2,jalan,waktu);
 				break;
 			case 3:
-				Show(G);
+				cout<<"Masukkan nama kota: ";
+				cin>>kota;
+				DeleteKota(G,kota);
 				break;
 			case 4:
+				cout<<"Masukkan nama kota 1: ";
+				cin>>kota1;
+
+				cout<<"Masukkan nama kota 2: ";
+				cin>>kota2;
+				Disconnecting(G,kota1,kota2);
+				break;
+			case 5:
+				Show(G);
+				break;
+			case 6:
 				tempList L;
     			CreateTempList(L);
 				totalWaktu = 0;
@@ -96,7 +113,16 @@ int main(int argc, char** argv) {
 				cin>>destinationKota;
 				Dijkstra(G, L, currentKota, destinationKota,totalWaktu);
 				break;
-			case 5:
+			case 7:
+				cout<<"Masukkan kota asal: ";
+				cin>>currentKota;
+				cout<<"Masukkan kota tujuan: ";
+				cin>>destinationKota;
+				cout<<"Masukkan nama jalan terblokir: ";
+				cin>>namaJalanTerblokir;
+				DFSAlternative(G, currentKota, destinationKota, namaJalanTerblokir);
+				break;
+			case 9:
 				break;
 			default:
 				cout<<"Input tidak valid\n";

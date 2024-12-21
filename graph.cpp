@@ -210,6 +210,38 @@ void Disconnecting(Graph &G,Infotype_Kota node1,Infotype_Kota node2) {
 	}
 }
 
+void DeleteKota(Graph &G, Infotype_Kota data) {
+	Addr_Kota P, Prec;
+
+	if (G.Start == Null) {
+		cout << "Graf Kosong\n";
+	} else {
+		P = G.Start;
+		if (P->Info == data) {
+			while (P->FirstJalan != Null) {
+				Disconnecting(G, data, P->FirstJalan->Info.kota);
+			}
+			G.Start = P->NextKota;
+			delete P;
+		} else {
+			while (P->NextKota != Null && P->NextKota->Info != data) {
+				P = P->NextKota;
+			}
+			if (P->NextKota != Null && P->NextKota->Info == data) {
+				Prec = P;
+				P = P->NextKota;
+				while (P->FirstJalan != Null) {
+					Disconnecting(G, data, P->FirstJalan->Info.kota);
+				}
+				Prec->NextKota = P->NextKota;
+				delete P;
+			} else {
+				cout << "Kota tidak ditemukan\n";
+			}
+		}
+	}
+}
+
 void Show(Graph G) {
 	Addr_Kota N;
 	Addr_Jalan E;
@@ -289,9 +321,187 @@ void Dijkstra(Graph &G, tempList &L, string currentKota, string destinationKota,
 		cout << "Melalui jalan " << shortest->Info.namaJalan << " memakan waktu " << shortest->Info.waktu ;
         Dijkstra(G, L, shortest->Info.kota, destinationKota, totalWaktu += shortest->Info.waktu); 
     } else {
-        cout << "Tidak ada tetangga yang belum dikunjungi dari kota " << currentKota << endl;
+        cout << "Tidak ada jalur yang bisa dilewati dari kota " << currentKota << endl;
     }
 }
+
+/**
+ * Salin isi tempList sumber (source) ke dalam tujuan (dest).
+ * Sesuaikan implementasinya dengan struktur tempList Anda.
+ */
+void CopyTempList(const tempList &source, tempList &dest) {
+    // Pastikan dest dikosongkan terlebih dahulu.
+    CreateTempList(dest);
+
+    Addr_TempListElmt p = source.first;
+    while (p != nullptr) {
+        InsertLast_TempList(dest, AlokasiTempElmt(p->info)); 
+        p = p->next;
+    }
+}
+
+/**
+ * Fungsi rekursif DFS untuk mencari jalur tercepat dan mencatat rutenya.
+ * - G: Graph yang menyimpan data kota dan jalan.
+ * - currentKota: Kota yang sedang dikunjungi.
+ * - destinationKota: Kota tujuan akhir.
+ * - currentWaktu: Total waktu tempuh saat ini pada jalur yang sedang dieksplorasi.
+ * - minWaktu: Variabel yang menyimpan waktu tempuh minimal dari semua rute yang valid.
+ * - L: tempList untuk menandai jalur saat ini (kota-kota yang sudah dilewati).
+ * - bestRoute: tempList untuk menyimpan jalur tercepat yang ditemukan sejauh ini.
+ * - namaJalanTerblokir: Nama jalan yang tidak boleh dilewati.
+ */
+void DFSAlternativeHelper(Graph &G,
+                          const string &currentKota,
+                          const string &destinationKota,
+                          int currentWaktu,
+                          int &minWaktu,
+                          tempList &L,
+                          tempList &bestRoute,
+                          const string &namaJalanTerblokir)
+{
+    // Jika kota saat ini sama dengan tujuan, cek apakah waktu tempuhnya lebih baik
+    if (currentKota == destinationKota) {
+        if (currentWaktu < minWaktu) {
+            minWaktu = currentWaktu;
+            // Salin jalur saat ini (L) menjadi jalur terbaik (bestRoute)
+            CopyTempList(L, bestRoute);
+        }
+        return;
+    }
+
+    // Cari node kota saat ini
+    Addr_Kota P = FindKota(G, currentKota);
+    if (P == nullptr) {
+        return;
+    }
+
+    // Telusuri semua jalan (edges) yang keluar dari kota saat ini
+    Addr_Jalan pJalan = P->FirstJalan;
+    while (pJalan != nullptr) {
+        bool isBlocked = (pJalan->Info.namaJalan == namaJalanTerblokir);
+        bool isVisited = (HasVisited(L, pJalan->Info.kota));
+
+        // Lanjutkan DFS jika jalan tidak diblokir dan kota tujuannya belum dikunjungi
+        if (!isBlocked && !isVisited) {
+            // Tandai kota tujuan jalan ini sebagai 'visited'
+            InsertLast_TempList(L, AlokasiTempElmt(pJalan->Info.kota));
+            cout << "Melalui jalan " << pJalan->Info.namaJalan 
+                 << " menuju kota " << pJalan->Info.kota 
+                 << " memakan waktu " << pJalan->Info.waktu << endl;
+
+            // Rekursi dengan menambahkan waktu tempuh sesuai jalan yang dipilih
+            DFSAlternativeHelper(G,
+                                 pJalan->Info.kota,
+                                 destinationKota,
+                                 currentWaktu + pJalan->Info.waktu,
+                                 minWaktu,
+                                 L,
+                                 bestRoute,
+                                 namaJalanTerblokir);
+
+            // Setelah rekursi, lakukan backtracking (hapus kota terakhir yang dimasukkan)
+            DeleteLast_TempList(L);
+            cout << "Kembali ke kota " << FindLastTempList(L) << endl;
+        }
+		
+        pJalan = pJalan->NextJalan; 
+    }
+}
+
+/**
+ * Fungsi utama untuk memanggil DFSAlternativeHelper, menyiapkan minWaktu,
+ * membuat tempList visited, dan menampilkan hasil.
+ * - namaJalanTerblokir: Jalur yang tidak boleh dilewati
+ */
+int DFSAlternative(Graph &G,
+                   const string &startKota,
+                   const string &destinationKota,
+                   const string &namaJalanTerblokir)
+{
+    // tempList untuk menandai kota-kota yang sudah dikunjungi pada jalur saat ini
+    tempList visited;
+    CreateTempList(visited);
+
+    // tempList untuk menyimpan jalur terbaik yang ditemukan
+    tempList bestRoute;
+    CreateTempList(bestRoute);
+
+    // Tandai kota awal sebagai visited
+	cout << "======= Proses Pencarian =======" << endl;
+	cout << "Kota " << startKota << " adalah kota asal" << endl;
+    InsertLast_TempList(visited, AlokasiTempElmt(startKota));
+
+    // Variabel untuk mencatat waktu minimum
+    int minWaktu = INT_MAX;
+
+    // Mulai DFS dari kota awal
+    DFSAlternativeHelper(G,
+                         startKota,
+                         destinationKota,
+                         0,          // currentWaktu (mulai dari 0)
+                         minWaktu,
+                         visited,
+                         bestRoute,
+                         namaJalanTerblokir);
+	cout << "========= ========= =========" << endl;
+
+    if (minWaktu == INT_MAX) {
+        // Tidak ditemukan jalur yang valid
+        cout << "Tidak ada jalur alternatif yang tersedia." << endl;
+        return -1;
+    } else {
+        cout << "Jalur alternatif terbaik membutuhkan waktu: " << minWaktu << endl;
+
+        // Baca bestRoute untuk menampilkan jalur tercepat
+        cout << "Rute tercepat: ";
+        Addr_TempListElmt p = bestRoute.first;
+        bool firstPrint = true;
+        while (p != nullptr) {
+            if (!firstPrint) cout << " -> ";
+            cout << p->info;
+            firstPrint = false;
+            p = p->next;
+        }
+        cout << endl;
+		cout << "===============================" << endl;
+
+        return minWaktu;
+    }
+}
+
+void ShowTempList(tempList L){
+	Addr_TempListElmt P = L.first;
+	while(P != Null){
+		cout << P->info << " ";
+		P = P->next;
+	}
+	cout << endl;
+}
+
+void DeleteLast_TempList(tempList &L) {
+	Addr_TempListElmt P = L.first;
+	if (P == nullptr) {
+		return;
+	}
+
+	if (P->next == nullptr) {
+		delete P;
+		L.first = nullptr;
+		return;
+	}
+
+	while (P->next->next != nullptr) {
+		P = P->next;
+	}
+
+	delete P->next;
+	P->next = nullptr;
+}
+
+
+
+
 
 Addr_Jalan FindShortestNeighbour(Graph G, Addr_Kota P, tempList L) {
     Addr_Jalan E = P->FirstJalan;
