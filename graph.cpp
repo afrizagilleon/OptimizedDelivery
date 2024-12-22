@@ -285,7 +285,7 @@ void Show(Graph G) {
 			while (E!=Null) {
 				cout<< "* Nama kota: " << E->Info.kota<<endl;
 				cout<< "Nama jalan: " << E->Info.namaJalan<<endl;
-				cout<< "Bobot : " << E->Info.waktu<<endl;
+				cout<< "Waktu : " << E->Info.waktu << " menit"<<endl;
 				E=E->NextJalan;
 			}
 			cout<<"<<==========================>>"<< endl;

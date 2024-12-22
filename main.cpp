@@ -5,16 +5,20 @@
 using namespace std;
 
 void menu(){
-	cout<<"1. Add Kota\n";
-	cout<<"2. Add Jalur\n";
-	cout<<"3. Delete Kota\n";
-	cout<<"4. Delete Jalur\n";
-	cout<<"5. Show Graph\n";
+	cout<<"=========== Pengiriman barang ===========\n";
+	cout<<"1. Tambah Kota\n";
+	cout<<"2. Tambah Jalur\n";
+	cout<<"3. Hapus Kota\n";
+	cout<<"4. Hapus Jalur\n";
+	cout<<"5. Lihat denah kota\n";
+	cout<<"---------- Sisitem pengiriman ----------\n";
 	cout<<"6. Jalur Tercepat \n";
 	cout<<"7. Jalur Tercepat Alternatif\n";
 	cout<<"8. Jalur Tercepat dengan Checkpoint\n";
+	cout<<"----------------------------------------\n";
 	cout<<"9. Exit\n";
-	cout<<"Choose: ";
+	cout<<"==========================================\n";
+	cout<<"Pilih : ";
 }
 
 int main(int argc, char** argv) {
@@ -123,7 +127,7 @@ int main(int argc, char** argv) {
 				clearOutputDFS(output);
 				DFSNormal(G, currentKota, destinationKota, output);
 				cout << "Jalur tercepat: " << output.jalur << endl;
-				cout << "Jalur terbaik membutuhkan waktu: " << output.waktu << endl;
+				cout << "Jalur terbaik membutuhkan waktu: " << output.waktu << " menit" <<endl;
 				break;
 			case 7:
 				tempList J;
@@ -182,7 +186,7 @@ int main(int argc, char** argv) {
 				}
 				DFSNormal(G, currentKota, destinationKota, output);
 				cout << "Jalur tercepat: " << output.jalur << endl;
-				cout << "Jalur terbaik membutuhkan waktu: " << output.waktu << endl;
+				cout << "Jalur terbaik membutuhkan waktu: " << output.waktu << " menit" <<endl;
 				break;
 			case 9:
 				break;
