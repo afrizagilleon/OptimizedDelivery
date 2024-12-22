@@ -51,7 +51,6 @@ int DFSNormal(Graph &G,
             if( firstPrint && output.jalur != ""){ // skip first kota kalau udh ada output sebelumnya
                 p = p->next;
             }
-            cout << "aku di sini" << endl;
 
             if (!firstPrint) {
                 output.jalur += " -> ";
