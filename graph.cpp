@@ -430,8 +430,8 @@ void DFSAlternativeHelper(Graph &G,
                           tempList &bestRoute,
                           const tempList &namaJalanTerblokir)
 {
-    // Jika kota saat ini sama dengan tujuan, cek apakah waktu tempuhnya lebih baik
     if (currentKota == destinationKota) {
+    // Jika kota saat ini sama dengan tujuan, cek apakah waktu tempuhnya lebih baik
         if (currentWaktu < minWaktu) {
             minWaktu = currentWaktu;
             // Salin jalur saat ini (L) menjadi jalur terbaik (bestRoute)
@@ -439,6 +439,7 @@ void DFSAlternativeHelper(Graph &G,
         }
         return;
     }
+	
 
     // Cari node kota saat ini
     Addr_Kota P = FindKota(G, currentKota);
