@@ -1,5 +1,6 @@
 #include <iostream>
 #include "graph.h"
+// #include "djikstra.h"
 
 using namespace std;
 
@@ -9,8 +10,9 @@ void menu(){
 	cout<<"3. Delete Kota\n";
 	cout<<"4. Delete Jalur\n";
 	cout<<"5. Show Graph\n";
-	cout<<"6. Jalur Tercepat (Djikstra)\n";
-	cout<<"7. Jalur Tercepat Alternatif (DFS)\n";
+	cout<<"6. Jalur Tercepat \n";
+	cout<<"7. Jalur Tercepat Alternatif\n";
+	cout<<"8. Jalur Tercepat dengan Checkpoint\n";
 	cout<<"9. Exit\n";
 	cout<<"Choose: ";
 }
@@ -18,6 +20,7 @@ void menu(){
 int main(int argc, char** argv) {
 	Graph G;
 	Addr_Kota P;
+	// Dijkstra D;
 
 	CreateGraph(G);
 	// P=AlokasiKota("A");
@@ -64,6 +67,9 @@ int main(int argc, char** argv) {
 		string currentKota, destinationKota;
 		string kota;
 		string namaJalanTerblokir;
+		string namaCheckPoint;
+		Addr_TempListElmt PP;
+		outputDFS output;
 		int totalWaktu;
 		switch(inputMenu){
 			case 1:
@@ -111,7 +117,11 @@ int main(int argc, char** argv) {
 				cin>>currentKota;
 				cout<<"Masukkan kota tujuan: ";
 				cin>>destinationKota;
-				Dijkstra(G, L, currentKota, destinationKota,totalWaktu);
+				// Dijkstra(G, L, currentKota, destinationKota,totalWaktu);
+				// init_dijkstra(D, G, currentKota, destinationKota);
+				// dijkstra_search_jalur(D);
+				clearOutputDFS(output);
+				DFSNormal(G, currentKota, destinationKota, output);
 				break;
 			case 7:
 				tempList J;
@@ -136,6 +146,41 @@ int main(int argc, char** argv) {
 					}
 				}
 				DFSAlternative(G, currentKota, destinationKota, J);
+				break;
+			case 8:
+				tempList CheckPoint;
+    			CreateTempList(CheckPoint);
+				totalWaktu = 0;
+				cout<<"Masukkan kota asal: ";
+				cin>>currentKota;
+				cout<<"Masukkan kota tujuan: ";
+				cin>>destinationKota;
+				while (namaCheckPoint != "0") {
+					cout<<"Masukkan nama kota yang harus dikunjungi (0 untuk selesai): ";
+					cin>>namaCheckPoint;
+
+					if (namaCheckPoint != "0") {
+						if(IsAJalanBlocked(CheckPoint, namaCheckPoint)){ // memeriksa apakah jalan sudah ditambahkan
+							cout<<"Kota sudah ditambahkan\n";
+						}else if(IsAKotaExist(G, namaCheckPoint)){
+							InsertLast_TempList(CheckPoint, AlokasiTempElmt(namaCheckPoint));
+						}else{
+							cout<<"Kota tidak ditemukan\n";
+						}
+					}
+				}
+				
+				clearOutputDFS(output);
+				PP = CheckPoint.first;
+				while (PP != nullptr) {
+					DFSNormal(G, currentKota, PP->info, output);
+					currentKota = PP->info;
+					PP = PP->next;
+					output.jalur += " -> ";
+				}
+				DFSNormal(G, currentKota, destinationKota, output);
+				cout << "Jalur tercepat: " << output.jalur << endl;
+				cout << "Jalur terbaik membutuhkan waktu: " << output.waktu << endl;
 				break;
 			case 9:
 				break;

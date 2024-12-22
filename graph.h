@@ -68,7 +68,6 @@ void DeleteLast_Jalan(Graph &G, Addr_Kota PKota, Addr_Jalan &P);
 void DeleteAfter_Jalan(Graph &G, Addr_Kota PKota, Addr_Jalan Prec, Addr_Jalan &P);
 void Delete_Jalan(Graph &G, Addr_Kota PKota, Addr_Jalan PJalan);
 void Disconnecting(Graph &G, Infotype_Kota node1, Infotype_Kota node2);
-void Dijkstra(Graph &G, tempList &L, string currentKota, string destinationKota, int &totalWaktu);
 void Show(Graph G);
 Addr_Jalan FindShortestNeighbour(Graph G, Addr_Kota P, tempList L);
 string FindLastTempList(tempList L);
@@ -76,7 +75,25 @@ bool HasVisited(tempList L, string kota);
 bool checkConnection(Graph G, Addr_Kota node1, Addr_Kota node2);
 void printTempList(tempList L);
 void DeleteKota(Graph &G, Infotype_Kota data);
-void Dijkstra(Graph &G, tempList &L, string start, string destination, int &totalWaktu);
+
+typedef struct {
+	int waktu;
+	string from, destination;
+	string jalur;
+} outputDFS;
+
+void clearOutputDFS(outputDFS &output);
+
+int DFSNormal(Graph &G,
+                   const string &startKota,
+                   const string &destinationKota, outputDFS &output);
+void DFSNormalHelper(Graph &G,
+                  const string &currentKota,
+                  const string &destinationKota,
+                  int currentWaktu,
+                  int &minWaktu,
+                  tempList &L,
+                  tempList &bestRoute, outputDFS &output);
 
 int DFSAlternative(Graph &G,
                    const string &startKota,
@@ -95,3 +112,4 @@ void DeleteLast_TempList(tempList &L);
 void ShowTempList(tempList L);
 bool IsAJalanBlocked(tempList L, string jalan);
 bool IsAJalanExist(Graph G, string namaJalan);
+bool IsAKotaExist(Graph G, string namaKota);
