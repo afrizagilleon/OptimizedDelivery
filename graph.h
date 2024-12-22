@@ -69,6 +69,7 @@ void DeleteAfter_Jalan(Graph &G, Addr_Kota PKota, Addr_Jalan Prec, Addr_Jalan &P
 void Delete_Jalan(Graph &G, Addr_Kota PKota, Addr_Jalan PJalan);
 void Disconnecting(Graph &G, Infotype_Kota node1, Infotype_Kota node2);
 void Show(Graph G);
+
 Addr_Jalan FindShortestNeighbour(Graph G, Addr_Kota P, tempList L);
 string FindLastTempList(tempList L);
 bool HasVisited(tempList L, string kota);
@@ -76,6 +77,14 @@ bool checkConnection(Graph G, Addr_Kota node1, Addr_Kota node2);
 void printTempList(tempList L);
 void DeleteKota(Graph &G, Infotype_Kota data);
 
+void CopyTempList(const tempList &source, tempList &dest);
+void DeleteLast_TempList(tempList &L);
+void ShowTempList(tempList L);
+bool IsAJalanBlocked(tempList L, string jalan);
+bool IsAJalanExist(Graph G, string namaJalan);
+bool IsAKotaExist(Graph G, string namaKota);
+
+// DFS 
 typedef struct {
 	int waktu;
 	string from, destination;
@@ -107,9 +116,3 @@ void DFSAlternativeHelper(Graph &G,
                           tempList &L,
                           tempList &bestRoute,
                           const tempList &namaJalanTerblokir);
-void CopyTempList(const tempList &source, tempList &dest);
-void DeleteLast_TempList(tempList &L);
-void ShowTempList(tempList L);
-bool IsAJalanBlocked(tempList L, string jalan);
-bool IsAJalanExist(Graph G, string namaJalan);
-bool IsAKotaExist(Graph G, string namaKota);
