@@ -315,31 +315,85 @@ void InsertLast_TempList(tempList &L, Addr_TempListElmt P){
 }
 
 
-void Dijkstra(Graph &G, tempList &L, string currentKota, string destinationKota, int &totalWaktu) {
-    InsertLast_TempList(L, AlokasiTempElmt(currentKota));
+void Dijkstra(Graph &G, tempList &L, string start, string destination, int &totalWaktu) {
+    // Inisialisasi daftar kota
+    struct DistanceNode {
+        string kota;
+        int waktu;
+        bool visited;
+    };
+    DistanceNode dist[100]; // Asumsi maksimal 100 kota
+    int numKota = 0;
 
-	if(totalWaktu != 0){
-	    cout << " menuju Kota " << currentKota << endl;
-	}else{
-		cout << "Kota " << currentKota << " adalah kota asal" << endl;
-	}
-    
-	if (currentKota == destinationKota) {
-        cout << "Kota " << currentKota << " adalah tujuan akhir" << endl;
-		cout << "Total waktu tersingkat yang diperlukan: " << totalWaktu << endl;
-        return;
+    // Memasukkan semua kota dari graf ke dalam array dist
+    Addr_Kota currentKota = G.Start;
+    while (currentKota != Null) {
+        dist[numKota].kota = currentKota->Info;
+        dist[numKota].waktu = (currentKota->Info == start) ? 0 : 9999999; // Kota asal = 0, lainnya tak terbatas
+        dist[numKota].visited = false;
+        currentKota = currentKota->NextKota;
+        numKota++;
     }
-	
 
-    Addr_Kota P = FindKota(G, currentKota);
-    Addr_Jalan shortest = FindShortestNeighbour(G, P, L);
-    if (shortest != nullptr) {
-		cout << "Melalui jalan " << shortest->Info.namaJalan << " memakan waktu " << shortest->Info.waktu ;
-        Dijkstra(G, L, shortest->Info.kota, destinationKota, totalWaktu += shortest->Info.waktu); 
-    } else {
-        cout << "Tidak ada jalur yang bisa dilewati dari kota " << currentKota << endl;
+    // Fungsi untuk menemukan indeks kota
+    auto findIndex = [&](const string &kota) -> int {
+        for (int i = 0; i < numKota; i++) {
+            if (dist[i].kota == kota) {
+                return i;
+            }
+        }
+        return -1; // Tidak ditemukan
+    };
+
+    // Mulai dari kota asal
+    while (true) {
+        int minDist = 9999999, currentIndex = -1;
+
+        // Cari kota yang belum dikunjungi dengan waktu terpendek
+        for (int i = 0; i < numKota; i++) {
+            if (!dist[i].visited && dist[i].waktu < minDist) {
+                minDist = dist[i].waktu;
+                currentIndex = i;
+            }
+        }
+
+        if (currentIndex == -1) break; // Tidak ada kota yang dapat diproses lebih lanjut
+
+        // Tandai kota sebagai telah dikunjungi
+        dist[currentIndex].visited = true;
+
+        // Jika kota yang sedang diproses adalah tujuan
+        if (dist[currentIndex].kota == destination) {
+            totalWaktu = dist[currentIndex].waktu;
+            cout << "Total waktu tersingkat dari " << start << " ke " << destination << " adalah " << totalWaktu << endl;
+            return;
+        }
+
+        // Update jarak ke tetangga-tetangga kota ini
+        Addr_Kota currentKota = G.Start;
+        while (currentKota != Null && currentKota->Info != dist[currentIndex].kota) {
+            currentKota = currentKota->NextKota;
+        }
+
+        if (currentKota != Null) {
+            Addr_Jalan jalan = currentKota->FirstJalan;
+            while (jalan != Null) {
+                int neighbourIndex = findIndex(jalan->Info.kota);
+                if (neighbourIndex != -1) {
+                    int newDist = dist[currentIndex].waktu + jalan->Info.waktu;
+                    if (newDist < dist[neighbourIndex].waktu) {
+                        dist[neighbourIndex].waktu = newDist;
+                    }
+                }
+                jalan = jalan->NextJalan;
+            }
+        }
     }
+
+    // Jika tidak ada jalur ke tujuan
+    cout << "Tidak ada jalur dari " << start << " ke " << destination << endl;
 }
+
 
 /**
  * Salin isi tempList sumber (source) ke dalam tujuan (dest).

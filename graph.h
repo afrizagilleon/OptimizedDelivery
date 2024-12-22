@@ -76,12 +76,7 @@ bool HasVisited(tempList L, string kota);
 bool checkConnection(Graph G, Addr_Kota node1, Addr_Kota node2);
 void printTempList(tempList L);
 void DeleteKota(Graph &G, Infotype_Kota data);
-void DijkstraAlternative(Graph &G,
-                         tempList &L,
-                         const string &currentKota,
-                         const string &destinationKota,
-                         int &totalWaktu,
-                         const string &namaJalanTerblokir);
+void Dijkstra(Graph &G, tempList &L, string start, string destination, int &totalWaktu);
 
 int DFSAlternative(Graph &G,
                    const string &startKota,
@@ -94,7 +89,7 @@ void DFSAlternativeHelper(Graph &G,
                           int &minWaktu,
                           tempList &L,
                           tempList &bestRoute,
-                          const string &namaJalanTerblokir);
+                          const tempList &namaJalanTerblokir);
 void CopyTempList(const tempList &source, tempList &dest);
 void DeleteLast_TempList(tempList &L);
 void ShowTempList(tempList L);
