@@ -48,9 +48,16 @@ int DFSNormal(Graph &G,
         Addr_TempListElmt p = bestRoute.first;
         bool firstPrint = true;
         while (p != nullptr) {
+            if( firstPrint && output.jalur != ""){
+                output.jalur += p->info;
+                p = p->next;
+                firstPrint = false;
+                continue;
+            }
+            cout << "aku di sini" << endl;
+
             if (!firstPrint) output.jalur += " -> ";
             output.jalur += p->info;
-            firstPrint = false;
             p = p->next;
         }
         cout << endl;
