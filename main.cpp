@@ -11,7 +11,7 @@ void menu(){
 	cout<<"3. Hapus Kota\n";
 	cout<<"4. Hapus Jalur\n";
 	cout<<"5. Lihat denah kota\n";
-	cout<<"---------- Sisitem pengiriman ----------\n";
+	cout<<"------- sistem pengiriman -------\n";
 	cout<<"6. Jalur Tercepat \n";
 	cout<<"7. Jalur Tercepat Alternatif\n";
 	cout<<"8. Jalur Tercepat dengan Checkpoint\n";
