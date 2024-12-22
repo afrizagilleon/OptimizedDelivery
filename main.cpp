@@ -122,6 +122,8 @@ int main(int argc, char** argv) {
 				// dijkstra_search_jalur(D);
 				clearOutputDFS(output);
 				DFSNormal(G, currentKota, destinationKota, output);
+				cout << "Jalur tercepat: " << output.jalur << endl;
+				cout << "Jalur terbaik membutuhkan waktu: " << output.waktu << endl;
 				break;
 			case 7:
 				tempList J;
