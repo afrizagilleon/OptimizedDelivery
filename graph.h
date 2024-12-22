@@ -62,7 +62,7 @@ void AddNewKota(Graph &G, Addr_Kota P);
 Addr_Kota FindKota(Graph G, Infotype_Kota data);
 void InsertLast_Jalan(Graph &G, Addr_Kota PKota, Addr_Jalan PJalan);
 void Connecting(Graph &G, Infotype_Kota node1, Infotype_Kota node2, string namaJalan, int waktu);
-Addr_Jalan FindJalan(Graph &G, Addr_Kota PKota, Infotype_Kota data);
+Addr_Jalan FindJalanByKota(Graph &G, Addr_Kota PKota, Infotype_Kota data);
 void DeleteFirst_Jalan(Graph &G, Addr_Kota PKota, Addr_Jalan &P);
 void DeleteLast_Jalan(Graph &G, Addr_Kota PKota, Addr_Jalan &P);
 void DeleteAfter_Jalan(Graph &G, Addr_Kota PKota, Addr_Jalan Prec, Addr_Jalan &P);
@@ -82,10 +82,11 @@ void DijkstraAlternative(Graph &G,
                          const string &destinationKota,
                          int &totalWaktu,
                          const string &namaJalanTerblokir);
+
 int DFSAlternative(Graph &G,
                    const string &startKota,
                    const string &destinationKota,
-                   const string &namaJalanTerblokir);
+                   const tempList &namaJalanTerblokir);
 void DFSAlternativeHelper(Graph &G,
                           const string &currentKota,
                           const string &destinationKota,
@@ -97,3 +98,5 @@ void DFSAlternativeHelper(Graph &G,
 void CopyTempList(const tempList &source, tempList &dest);
 void DeleteLast_TempList(tempList &L);
 void ShowTempList(tempList L);
+bool IsAJalanBlocked(tempList L, string jalan);
+bool IsAJalanExist(Graph G, string namaJalan);

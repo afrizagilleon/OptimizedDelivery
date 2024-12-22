@@ -116,7 +116,7 @@ bool checkConnection(Graph G, Addr_Kota node1, Addr_Kota node2) {
 
 
 
-Addr_Jalan FindJalan(Graph &G,Addr_Kota PKota,Infotype_Kota data) {
+Addr_Jalan FindJalanByKota(Graph &G,Addr_Kota PKota,Infotype_Kota data) {
 	Addr_Jalan P;
 
 	if (G.Start==Null || PKota==Null){
@@ -135,6 +135,22 @@ Addr_Jalan FindJalan(Graph &G,Addr_Kota PKota,Infotype_Kota data) {
 		}
 	}
 }
+
+bool IsAJalanExist(Graph G, string namaJalan) {
+	Addr_Kota P = G.Start;
+	while (P != Null) {
+		Addr_Jalan E = P->FirstJalan;
+		while (E != Null) {
+			if (E->Info.namaJalan == namaJalan) {
+				return true;
+			}
+			E = E->NextJalan;
+		}
+		P = P->NextKota;
+	}
+	return false;
+}
+
 
 void DeleteFirst_Jalan(Graph &G,Addr_Kota PKota,Addr_Jalan &P) {
 	if (G.Start==Null) {
@@ -195,8 +211,8 @@ void Disconnecting(Graph &G,Infotype_Kota node1,Infotype_Kota node2) {
 	N1=FindKota(G,node1);
 	N2=FindKota(G,node2);
 	if (N1!=Null && N2!=Null) {
-		E1=FindJalan(G,N1,node2);
-		E2=FindJalan(G,N2,node1);
+		E1=FindJalanByKota(G,N1,node2);
+		E2=FindJalanByKota(G,N2,node1);
 		if (E1!=Null && E2!=Null) {
 			Delete_Jalan(G,N1,E1);
 			Delete_Jalan(G,N2,E2);
@@ -358,7 +374,7 @@ void DFSAlternativeHelper(Graph &G,
                           int &minWaktu,
                           tempList &L,
                           tempList &bestRoute,
-                          const string &namaJalanTerblokir)
+                          const tempList &namaJalanTerblokir)
 {
     // Jika kota saat ini sama dengan tujuan, cek apakah waktu tempuhnya lebih baik
     if (currentKota == destinationKota) {
@@ -379,7 +395,7 @@ void DFSAlternativeHelper(Graph &G,
     // Telusuri semua jalan (edges) yang keluar dari kota saat ini
     Addr_Jalan pJalan = P->FirstJalan;
     while (pJalan != nullptr) {
-        bool isBlocked = (pJalan->Info.namaJalan == namaJalanTerblokir);
+        bool isBlocked = (IsAJalanBlocked(namaJalanTerblokir, pJalan->Info.namaJalan));
         bool isVisited = (HasVisited(L, pJalan->Info.kota));
 
         // Lanjutkan DFS jika jalan tidak diblokir dan kota tujuannya belum dikunjungi
@@ -417,7 +433,7 @@ void DFSAlternativeHelper(Graph &G,
 int DFSAlternative(Graph &G,
                    const string &startKota,
                    const string &destinationKota,
-                   const string &namaJalanTerblokir)
+                   const tempList &namaJalanTerblokir)
 {
     // tempList untuk menandai kota-kota yang sudah dikunjungi pada jalur saat ini
     tempList visited;
@@ -528,6 +544,16 @@ bool HasVisited(tempList L, string kota) {
     return false;
 }
 
+bool IsAJalanBlocked(tempList L, string jalan) {
+    Addr_TempListElmt P = L.first;
+    while (P != nullptr) {
+        if (P->info == jalan) {
+            return true;
+        }
+        P = P->next;
+    }
+    return false;
+}
 
 
 

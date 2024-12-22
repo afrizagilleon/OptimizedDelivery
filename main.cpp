@@ -114,13 +114,28 @@ int main(int argc, char** argv) {
 				Dijkstra(G, L, currentKota, destinationKota,totalWaktu);
 				break;
 			case 7:
+				tempList J;
+    			CreateTempList(J);
 				cout<<"Masukkan kota asal: ";
 				cin>>currentKota;
 				cout<<"Masukkan kota tujuan: ";
 				cin>>destinationKota;
-				cout<<"Masukkan nama jalan terblokir: ";
-				cin>>namaJalanTerblokir;
-				DFSAlternative(G, currentKota, destinationKota, namaJalanTerblokir);
+
+				while (namaJalanTerblokir != "0") {
+					cout<<"Masukkan nama jalan yang terblokir (0 untuk selesai): ";
+					cin>>namaJalanTerblokir;
+
+					if (namaJalanTerblokir != "0") {
+						if(IsAJalanBlocked(J, namaJalanTerblokir)){
+							cout<<"Jalan sudah terblokir\n";
+						}else if(IsAJalanExist(G, namaJalanTerblokir)){
+							InsertLast_TempList(J, AlokasiTempElmt(namaJalanTerblokir));
+						}else{
+							cout<<"Jalan tidak ditemukan\n";
+						}
+					}
+				}
+				DFSAlternative(G, currentKota, destinationKota, J);
 				break;
 			case 9:
 				break;
